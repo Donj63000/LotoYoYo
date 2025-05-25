@@ -51,4 +51,4 @@ Ce projet est distribué sous licence MIT. Voir le fichier [`src/main/java/org/e
 
 ## Remerciements
 
-LotoYoYo a été développé par Valentin Gidon avec l'aide d'une IA (JetBrains). Vos retours et contributions sont les bienvenus !
+LotoYoYo a été développé par DonJ avec l'aide d'une IA (JetBrains). Vos retours et contributions sont les bienvenus !
