@@ -138,6 +138,7 @@ public class Main extends JFrame {
             }
         }
         Autogrille.refreshOpenPanels();
+        Aide.refreshOpenWindows();
         SwingUtilities.updateComponentTreeUI(this);
     }
 

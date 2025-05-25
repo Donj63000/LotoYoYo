@@ -1,9 +1,22 @@
 package org.example;
+
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Aide extends JFrame {
+
+    private static final List<Aide> OPEN_AIDES = new ArrayList<>();
+
+    private JPanel mainPanel;
+    private JTextPane aideTextPane;
+    private JLabel lblTitle;
 
     public Aide() {
         super("Aide - LotoYoYo");
@@ -18,21 +31,20 @@ public class Aide extends JFrame {
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().setBackground(Theme.BACKGROUND_COLOR);
-
-        JPanel mainPanel = new JPanel(new MigLayout(
+        mainPanel = new JPanel(new MigLayout(
                 "insets 12, fill",
                 "[grow]",
                 "[][]"
         ));
         mainPanel.setBackground(Theme.BACKGROUND_COLOR);
 
-        JLabel lblTitle = new JLabel("Guide d'utilisation de LotoYoYo");
+        lblTitle = new JLabel("Guide d'utilisation de LotoYoYo");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
         lblTitle.setForeground(Theme.PRIMARY_COLOR);
         lblTitle.setBorder(new EmptyBorder(0, 0, 10, 0));
         mainPanel.add(lblTitle, "center, wrap");
 
-        JTextPane aideTextPane = new JTextPane();
+        aideTextPane = new JTextPane();
         aideTextPane.setContentType("text/html");
         aideTextPane.setEditable(false);
         aideTextPane.setBackground(Theme.CARD_BACKGROUND);
@@ -48,6 +60,30 @@ public class Aide extends JFrame {
         mainPanel.add(scrollPane, "grow, push");
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
+
+        OPEN_AIDES.add(this);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                OPEN_AIDES.remove(Aide.this);
+            }
+        });
+    }
+
+    static void refreshOpenWindows() {
+        for (Aide a : new ArrayList<>(OPEN_AIDES)) {
+            a.applyTheme();
+        }
+    }
+
+    void applyTheme() {
+        getContentPane().setBackground(Theme.BACKGROUND_COLOR);
+        mainPanel.setBackground(Theme.BACKGROUND_COLOR);
+        lblTitle.setForeground(Theme.PRIMARY_COLOR);
+        aideTextPane.setBackground(Theme.CARD_BACKGROUND);
+        aideTextPane.setForeground(Theme.TEXT_COLOR);
+        aideTextPane.setCaretColor(Theme.TEXT_COLOR);
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private String getHelpTextHtml() {
