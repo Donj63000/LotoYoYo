@@ -4,10 +4,16 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.example.Theme;
 import net.miginfocom.swing.MigLayout;
 
 public class Autogrille {
+
+    private static final List<ReadOnlyGridFrameWithStats> OPEN_PANELS = new ArrayList<>();
+
 
     public static List<Calcul.ScenarioCost> computeAutoGrilles(
             double[][] probList,
@@ -17,6 +23,20 @@ public class Autogrille {
         return Calcul.kBestClosestScenarios(probList, allowedChoices, k);
     }
 
+    static void register(ReadOnlyGridFrameWithStats p) {
+        OPEN_PANELS.add(p);
+    }
+
+    static void unregister(ReadOnlyGridFrameWithStats p) {
+        OPEN_PANELS.remove(p);
+    }
+
+    public static void refreshOpenPanels() {
+        for (ReadOnlyGridFrameWithStats p : new ArrayList<>(OPEN_PANELS)) {
+            p.applyTheme();
+        }
+    }
+
     public static JCheckBox makeReadonlyCheckBoxGreen(boolean selected) {
         JCheckBox cb = new JCheckBox();
         cb.setOpaque(true);
@@ -24,14 +44,14 @@ public class Autogrille {
         if (selected) {
             cb.setBackground(new Color(0, 128, 0)); // vert
         } else {
-            cb.setBackground(new Color(50, 50, 50)); // sombre par défaut
+            cb.setBackground(Theme.CARD_BACKGROUND); // sombre par défaut
         }
 
         cb.setSelected(selected);
 
         cb.setEnabled(false);
 
-        cb.setForeground(Color.WHITE);
+        cb.setForeground(Theme.TEXT_COLOR);
 
 
         cb.setFocusPainted(false);
@@ -82,18 +102,18 @@ public class Autogrille {
 
             setLayout(new BorderLayout(8,8));
             setBorder(new LineBorder(new Color(80,80,80), 1));
-            setBackground(new Color(44,44,44));
+            setBackground(Theme.CARD_BACKGROUND);
 
             leftPanel = new JPanel();
             leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-            leftPanel.setBackground(new Color(44,44,44));
+            leftPanel.setBackground(Theme.CARD_BACKGROUND);
 
             rightPanel = new JPanel(new MigLayout(
                     "insets 8 8 8 8, wrap 2, gapx 8, gapy 4",
                     "[right]8[left]",
                     "[]"
             ));
-            rightPanel.setBackground(new Color(44,44,44));
+            rightPanel.setBackground(Theme.CARD_BACKGROUND);
 
             add(leftPanel,  BorderLayout.WEST);
             add(rightPanel, BorderLayout.CENTER);
@@ -101,24 +121,25 @@ public class Autogrille {
             createLeftPanel();
             createRightPanel();
             updateCalculs();
+            Autogrille.register(this);
         }
 
         private void createLeftPanel() {
             JPanel pLeft = new JPanel();
             pLeft.setLayout(new BoxLayout(pLeft, BoxLayout.Y_AXIS));
-            pLeft.setBackground(new Color(44,44,44));
+            pLeft.setBackground(Theme.CARD_BACKGROUND);
             pLeft.setBorder(BorderFactory.createTitledBorder(
                     new LineBorder(new Color(80,80,80)),
                     "AutoGrille #"+ gridIndex,
                     TitledBorder.LEFT,
                     TitledBorder.TOP,
                     new Font("Arial", Font.BOLD, 12),
-                    Color.WHITE
+                    Theme.TEXT_COLOR
             ));
 
             JLabel lblTitle = new JLabel(numMatches + " Match(s)");
             lblTitle.setFont(new Font("Arial", Font.BOLD, 12));
-            lblTitle.setForeground(Color.WHITE);
+            lblTitle.setForeground(Theme.TEXT_COLOR);
             pLeft.add(lblTitle);
 
             double probEst = Math.exp(-costValue);
@@ -160,7 +181,7 @@ public class Autogrille {
         private void createRightPanel() {
             JLabel lblStatsTitle = new JLabel("Statistiques");
             lblStatsTitle.setFont(new Font("Arial", Font.BOLD, 12));
-            lblStatsTitle.setForeground(Color.WHITE);
+            lblStatsTitle.setForeground(Theme.TEXT_COLOR);
             rightPanel.add(lblStatsTitle, "span 2, align center, wrap");
 
             labelNbCombinaisons = addStatLine("Nombre de tickets différents", "1");
@@ -171,21 +192,21 @@ public class Autogrille {
             rightPanel.add(new JSeparator(), "span 2, growx, gaptop 6, gapbottom 4");
 
             JPanel distPanel = new JPanel(new BorderLayout(5,5));
-            distPanel.setBackground(new Color(44,44,44));
+            distPanel.setBackground(Theme.CARD_BACKGROUND);
             distPanel.setBorder(BorderFactory.createTitledBorder(
                     new LineBorder(new Color(80,80,80)),
                     "Probabilités (# bons résultats)",
                     TitledBorder.LEFT,
                     TitledBorder.TOP,
                     new Font("Arial", Font.BOLD, 12),
-                    Color.WHITE
+                    Theme.TEXT_COLOR
             ));
             textDistribution = new JTextArea(6,30);
             textDistribution.setLineWrap(true);
             textDistribution.setWrapStyleWord(true);
             textDistribution.setEditable(false);
-            textDistribution.setBackground(new Color(42,42,42));
-            textDistribution.setForeground(new Color(220,220,220));
+            textDistribution.setBackground(Theme.INPUT_BACKGROUND);
+            textDistribution.setForeground(Theme.TEXT_COLOR);
             textDistribution.setBorder(new EmptyBorder(4,4,4,4));
 
             JScrollPane distScroll = new JScrollPane(textDistribution);
@@ -266,14 +287,32 @@ public class Autogrille {
             labelPossibilites.setText( String.valueOf(poss) );
         }
 
+        void applyTheme() {
+            setBackground(Theme.CARD_BACKGROUND);
+            leftPanel.setBackground(Theme.CARD_BACKGROUND);
+            rightPanel.setBackground(Theme.CARD_BACKGROUND);
+            textDistribution.setBackground(Theme.INPUT_BACKGROUND);
+            textDistribution.setForeground(Theme.TEXT_COLOR);
+
+            JLabel[] labels = {labelNbCombinaisons, labelCost, labelCoverage,
+                    labelProbaCouvrir, labelAtLeast1, labelAtLeastHalf, labelAtLeastAll,
+                    labelUncovered, labelWorstCase, labelEfficiency,
+                    labelMeanHits, labelStdHits, labelDisposition, labelPossibilites};
+            for (JLabel l : labels) {
+                if (l != null) l.setForeground(Theme.TEXT_COLOR);
+            }
+
+            SwingUtilities.updateComponentTreeUI(this);
+        }
+
         private JLabel addStatLine(String key, String initValue){
             JLabel lblKey= new JLabel(key+" :");
-            lblKey.setForeground(Color.WHITE);
+            lblKey.setForeground(Theme.TEXT_COLOR);
             lblKey.setFont(new Font("Arial", Font.PLAIN, 12));
             rightPanel.add(lblKey, "align right");
 
             JLabel lblVal= new JLabel(initValue);
-            lblVal.setForeground(Color.WHITE);
+            lblVal.setForeground(Theme.TEXT_COLOR);
             lblVal.setFont(new Font("Arial", Font.BOLD, 12));
             rightPanel.add(lblVal, "align left, wrap");
             return lblVal;
