@@ -139,7 +139,7 @@ public class GridPanel extends JPanel {
         final Color defaultBG = Theme.CARD_BACKGROUND;
 
         cb.setBackground(defaultBG);
-        cb.setForeground(Color.WHITE);
+        cb.setForeground(Theme.TEXT_COLOR);
         cb.setFocusPainted(false);
 
         cb.addItemListener(e -> {
@@ -164,7 +164,7 @@ public class GridPanel extends JPanel {
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
                 new Font("Arial",Font.BOLD,12),
-                Color.WHITE
+                Theme.TEXT_COLOR
         ));
 
         for(int i=0; i<nMatches; i++){
@@ -227,7 +227,7 @@ public class GridPanel extends JPanel {
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
                 new Font("Arial", Font.BOLD, 12),
-                Color.WHITE
+                Theme.TEXT_COLOR
         ));
 
         txtDist = new JTextArea(5, 28);
@@ -449,6 +449,7 @@ public class GridPanel extends JPanel {
             mainPanel.setBackground(Theme.CARD_BACKGROUND);
 
             int idx=1;
+            java.util.List<Autogrille.ReadOnlyGridFrameWithStats> panels = new java.util.ArrayList<>();
             for(Calcul.ScenarioCost sc: autoScens){
                 Autogrille.ReadOnlyGridFrameWithStats roPanel=
                         new Autogrille.ReadOnlyGridFrameWithStats(
@@ -458,12 +459,18 @@ public class GridPanel extends JPanel {
                         BorderFactory.createLineBorder(new Color(80,80,80)),
                         new EmptyBorder(8,8,8,8)
                 ));
+                panels.add(roPanel);
                 mainPanel.add(roPanel);
                 idx++;
             }
             JScrollPane sp= new JScrollPane(mainPanel);
             sp.setBackground(Theme.CARD_BACKGROUND);
             autoFrame.add(sp, BorderLayout.CENTER);
+            autoFrame.addWindowListener(new java.awt.event.WindowAdapter(){
+                @Override public void windowClosed(java.awt.event.WindowEvent e){
+                    for(var p: panels) Autogrille.unregister(p);
+                }
+            });
             autoFrame.setVisible(true);
 
         } catch(Exception e){
@@ -557,14 +564,14 @@ public class GridPanel extends JPanel {
 
     private void styleField(JTextField f){
         f.setFont(new Font("Arial", Font.PLAIN, 12));
-        f.setBackground(new Color(42,42,42));
-        f.setForeground(Color.WHITE);
+        f.setBackground(Theme.INPUT_BACKGROUND);
+        f.setForeground(Theme.TEXT_COLOR);
         f.setBorder(new EmptyBorder(2,4,2,4));
     }
 
     private JLabel makeLabel(String text, int fontSize, int style){
         JLabel lbl= new JLabel(text);
-        lbl.setForeground(Color.WHITE);
+        lbl.setForeground(Theme.TEXT_COLOR);
         lbl.setFont(new Font("Arial", style, fontSize));
         return lbl;
     }
@@ -574,5 +581,33 @@ public class GridPanel extends JPanel {
         JLabel val= makeLabel(init, 12, Font.BOLD);
         container.add(val, "align left");
         return val;
+    }
+
+    public void refreshTheme() {
+        setBackground(Theme.CARD_BACKGROUND);
+        for (JCheckBox[] row : checkRows) {
+            for (JCheckBox cb : row) {
+                cb.setBackground(Theme.CARD_BACKGROUND);
+                cb.setForeground(Theme.TEXT_COLOR);
+            }
+        }
+        for (JTextField[] row : oddsRows) {
+            for (JTextField f : row) {
+                f.setBackground(Theme.INPUT_BACKGROUND);
+                f.setForeground(Theme.TEXT_COLOR);
+            }
+        }
+        txtDist.setBackground(Theme.CARD_BACKGROUND);
+        txtDist.setForeground(Theme.TEXT_COLOR);
+
+        JLabel[] labels = {lblTickets, lblBudget, lblCover, lblAll,
+                lblAtLeast1, lblAtLeastHalf, lblAtLeastAll,
+                lblScenMiss, lblWorst, lblEff, lblMean, lblStd,
+                lblConfigs, lblForces};
+        for (JLabel lbl : labels) {
+            if (lbl != null) lbl.setForeground(Theme.TEXT_COLOR);
+        }
+
+        SwingUtilities.updateComponentTreeUI(this);
     }
 }

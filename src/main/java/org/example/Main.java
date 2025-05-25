@@ -132,6 +132,12 @@ public class Main extends JFrame {
         tfNbMatches.setForeground(Theme.TEXT_COLOR);
         gridsContainer.setBackground(Theme.CARD_BACKGROUND);
         scroll.getViewport().setBackground(Theme.CARD_BACKGROUND);
+        for (Component c : gridsContainer.getComponents()) {
+            if (c instanceof GridPanel gp) {
+                gp.refreshTheme();
+            }
+        }
+        Autogrille.refreshOpenPanels();
         SwingUtilities.updateComponentTreeUI(this);
     }
 
