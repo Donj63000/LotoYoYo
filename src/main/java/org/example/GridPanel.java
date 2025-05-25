@@ -30,7 +30,7 @@ public class GridPanel extends JPanel {
         this.nMatches  = nMatches;
         this.onRemove  = onRemove;
 
-        setBackground(new Color(28,28,28));
+        setBackground(Theme.CARD_BACKGROUND);
         setLayout(new BorderLayout(5,5));
         setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(100,100,100)),
@@ -52,7 +52,7 @@ public class GridPanel extends JPanel {
         JPanel bottomPanel = buildBottomPanel();
 
         JPanel leftWrapper = new JPanel(new BorderLayout(0,8));
-        leftWrapper.setBackground(new Color(28,28,28));
+        leftWrapper.setBackground(Theme.CARD_BACKGROUND);
         leftWrapper.add(leftPanel, BorderLayout.NORTH);
         leftWrapper.add(cotesPanel, BorderLayout.CENTER);
 
@@ -64,7 +64,7 @@ public class GridPanel extends JPanel {
         split.setResizeWeight(0.35);
         split.setOneTouchExpandable(true);
         split.setDividerSize(6);
-        split.setBackground(new Color(28,28,28));
+        split.setBackground(Theme.CARD_BACKGROUND);
 
         add(split, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -73,7 +73,7 @@ public class GridPanel extends JPanel {
     private JPanel buildLeftPanel() {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.setBackground(new Color(28,28,28));
+        p.setBackground(Theme.CARD_BACKGROUND);
 
         Box rowTitle = Box.createHorizontalBox();
         JLabel lblTitle = makeLabel(
@@ -136,7 +136,7 @@ public class GridPanel extends JPanel {
     }
 
     private void styleCheckBox(JCheckBox cb, Color selectedColor) {
-        final Color defaultBG = new Color(28,28,28);
+        final Color defaultBG = Theme.CARD_BACKGROUND;
 
         cb.setBackground(defaultBG);
         cb.setForeground(Color.WHITE);
@@ -157,7 +157,7 @@ public class GridPanel extends JPanel {
                 "[right][grow,fill][grow,fill][grow,fill]",
                 "[]10[]"
         ));
-        p.setBackground(new Color(28,28,28));
+        p.setBackground(Theme.CARD_BACKGROUND);
         p.setBorder(BorderFactory.createTitledBorder(
                 new LineBorder(new Color(100,100,100)),
                 "Cotes (1/N/2)",
@@ -220,7 +220,7 @@ public class GridPanel extends JPanel {
         p.add(new JSeparator(), "span 2, growx, gaptop 6, gapbottom 4");
 
         JPanel pDist = new JPanel(new BorderLayout(6,6));
-        pDist.setBackground(new Color(30,34,40));
+        pDist.setBackground(Theme.CARD_BACKGROUND);
         pDist.setBorder(BorderFactory.createTitledBorder(
                 new LineBorder(new Color(80,80,80)),
                 "Distribution",
@@ -233,7 +233,7 @@ public class GridPanel extends JPanel {
         txtDist = new JTextArea(5, 28);
         txtDist.setEditable(false);
         txtDist.setFont(new Font("JetBrains Mono", Font.PLAIN, 11));
-        txtDist.setBackground(new Color(30,34,40));
+        txtDist.setBackground(Theme.CARD_BACKGROUND);
         txtDist.setForeground(Theme.TEXT_COLOR);
         txtDist.setBorder(new EmptyBorder(4,4,4,4));
         txtDist.setLineWrap(false);
@@ -266,18 +266,18 @@ public class GridPanel extends JPanel {
 
     private JPanel buildBottomPanel() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,8));
-        p.setBackground(new Color(28,28,28));
+        p.setBackground(Theme.CARD_BACKGROUND);
 
         JButton btnCalc = new JButton("Calculer");
         btnCalc.setFont(new Font("Arial", Font.PLAIN, 12));
-        btnCalc.setBackground(new Color(70,70,70));
+        btnCalc.setBackground(Theme.PRIMARY_COLOR);
         btnCalc.setForeground(Color.WHITE);
         btnCalc.addActionListener(e->calculate());
         p.add(btnCalc);
 
         JButton btnAuto = new JButton("Auto-Grille");
         btnAuto.setFont(new Font("Arial", Font.PLAIN, 12));
-        btnAuto.setBackground(new Color(70,70,70));
+        btnAuto.setBackground(Theme.PRIMARY_COLOR);
         btnAuto.setForeground(Color.WHITE);
         btnAuto.addActionListener(e->autoGrille());
         p.add(btnAuto);
@@ -438,15 +438,7 @@ public class GridPanel extends JPanel {
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            Theme.applyDarkTheme();
-            JFrame autoFrame= new JFrame("Auto-Grilles Générées (X = " + combos + ")");
-            autoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            autoFrame.setSize(900,600);
-            autoFrame.setLocationRelativeTo(null);
-
-            JPanel mainPanel= new JPanel();
-            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-            mainPanel.setBackground(new Color(28,28,28));
+            AutoFrame autoFrame= new AutoFrame("Auto-Grilles Générées (X = " + combos + ")");
 
             int idx=1;
             for(Calcul.ScenarioCost sc: autoScens){
@@ -458,12 +450,10 @@ public class GridPanel extends JPanel {
                         BorderFactory.createLineBorder(new Color(80,80,80)),
                         new EmptyBorder(8,8,8,8)
                 ));
-                mainPanel.add(roPanel);
+                autoFrame.mainPanel.add(roPanel);
                 idx++;
             }
-            JScrollPane sp= new JScrollPane(mainPanel);
-            sp.setBackground(new Color(28,28,28));
-            autoFrame.add(sp, BorderLayout.CENTER);
+            autoFrame.applyTheme();
             autoFrame.setVisible(true);
 
         } catch(Exception e){
@@ -557,14 +547,14 @@ public class GridPanel extends JPanel {
 
     private void styleField(JTextField f){
         f.setFont(new Font("Arial", Font.PLAIN, 12));
-        f.setBackground(new Color(42,42,42));
-        f.setForeground(Color.WHITE);
+        f.setBackground(Theme.INPUT_BACKGROUND);
+        f.setForeground(Theme.TEXT_COLOR);
         f.setBorder(new EmptyBorder(2,4,2,4));
     }
 
     private JLabel makeLabel(String text, int fontSize, int style){
         JLabel lbl= new JLabel(text);
-        lbl.setForeground(Color.WHITE);
+        lbl.setForeground(Theme.TEXT_COLOR);
         lbl.setFont(new Font("Arial", style, fontSize));
         return lbl;
     }
@@ -574,5 +564,34 @@ public class GridPanel extends JPanel {
         JLabel val= makeLabel(init, 12, Font.BOLD);
         container.add(val, "align left");
         return val;
+    }
+
+    static class AutoFrame extends JFrame implements Theme.ThemeListener {
+        final JPanel mainPanel;
+        AutoFrame(String title) {
+            super(title);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setSize(900,600);
+            setLocationRelativeTo(null);
+            mainPanel = new JPanel();
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+            JScrollPane sp = new JScrollPane(mainPanel);
+            add(sp, BorderLayout.CENTER);
+            Theme.register(this);
+        }
+
+        @Override
+        public void applyTheme() {
+            getContentPane().setBackground(Theme.BACKGROUND_COLOR);
+            mainPanel.setBackground(Theme.CARD_BACKGROUND);
+            ((JScrollPane)getContentPane().getComponent(0)).getViewport().setBackground(Theme.CARD_BACKGROUND);
+            SwingUtilities.updateComponentTreeUI(this);
+        }
+
+        @Override
+        public void dispose() {
+            Theme.unregister(this);
+            super.dispose();
+        }
     }
 }

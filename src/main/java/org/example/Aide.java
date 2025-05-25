@@ -3,13 +3,18 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-public class Aide extends JFrame {
+
+public class Aide extends JFrame implements Theme.ThemeListener {
+
+    private JPanel mainPanel;
+    private JTextPane aideTextPane;
+    private JScrollPane scrollPane;
 
     public Aide() {
         super("Aide - LotoYoYo");
 
-        // Appliquer le thème sombre
-        Theme.applyDarkTheme();
+        // Appliquer le thème courant
+        Theme.applyCurrentTheme();
 
         // Configuration de base de la fenêtre
         setSize(800, 600);
@@ -19,7 +24,7 @@ public class Aide extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().setBackground(Theme.BACKGROUND_COLOR);
 
-        JPanel mainPanel = new JPanel(new MigLayout(
+        mainPanel = new JPanel(new MigLayout(
                 "insets 12, fill",
                 "[grow]",
                 "[][]"
@@ -32,7 +37,7 @@ public class Aide extends JFrame {
         lblTitle.setBorder(new EmptyBorder(0, 0, 10, 0));
         mainPanel.add(lblTitle, "center, wrap");
 
-        JTextPane aideTextPane = new JTextPane();
+        aideTextPane = new JTextPane();
         aideTextPane.setContentType("text/html");
         aideTextPane.setEditable(false);
         aideTextPane.setBackground(Theme.CARD_BACKGROUND);
@@ -42,12 +47,13 @@ public class Aide extends JFrame {
         aideTextPane.setForeground(Theme.TEXT_COLOR);
         aideTextPane.setCaretColor(Theme.TEXT_COLOR);
 
-        JScrollPane scrollPane = new JScrollPane(aideTextPane);
+        scrollPane = new JScrollPane(aideTextPane);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         mainPanel.add(scrollPane, "grow, push");
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
+        Theme.register(this);
     }
 
     private String getHelpTextHtml() {
@@ -166,5 +172,22 @@ public class Aide extends JFrame {
 
                         "</body>" +
                         "</html>";
+    }
+
+    @Override
+    public void applyTheme() {
+        getContentPane().setBackground(Theme.BACKGROUND_COLOR);
+        mainPanel.setBackground(Theme.BACKGROUND_COLOR);
+        aideTextPane.setBackground(Theme.CARD_BACKGROUND);
+        aideTextPane.setForeground(Theme.TEXT_COLOR);
+        aideTextPane.setCaretColor(Theme.TEXT_COLOR);
+        scrollPane.getViewport().setBackground(Theme.CARD_BACKGROUND);
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    @Override
+    public void dispose() {
+        Theme.unregister(this);
+        super.dispose();
     }
 }
