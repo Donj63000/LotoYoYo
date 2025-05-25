@@ -13,7 +13,7 @@ LotoYoYo est une application Java permettant de générer et d'analyser des gril
 
 ## Prérequis
 
-- Java 17 ou supérieur.
+- Java 17 ou supérieur (SDK d'Oracle).
 - Maven (facultatif si vous utilisez directement le JAR fourni).
 
 ## Installation de Java
@@ -23,29 +23,25 @@ plus simple selon votre système :
 
 ### Windows
 
-1. Rendez-vous sur [Adoptium](https://adoptium.net) et téléchargez l'installeur
-   **Temurin&nbsp;17** pour Windows.
-2. Exécutez le fichier `.msi` obtenu puis suivez les options par défaut.
+1. Rendez-vous sur le [site d'Oracle](https://www.oracle.com/java/technologies/downloads/) et
+   téléchargez l'installeur du **JDK 17** pour Windows.
+2. Exécutez le fichier obtenu puis suivez les options par défaut.
 3. Ouvrez une nouvelle invite de commandes et vérifiez l'installation avec
    `java -version`.
 
 ### macOS
 
-1. Installez Homebrew si ce n'est pas déjà fait (<https://brew.sh>).
-2. Dans un terminal, lancez :
-   ```bash
-   brew install openjdk@17
-   ```
-3. Suivez les indications affichées pour ajouter Java à votre `PATH`, puis
-   contrôlez l'installation via `java -version`.
+1. Téléchargez le paquet **JDK 17** pour macOS depuis le [site d'Oracle](https://www.oracle.com/java/technologies/downloads/).
+2. Ouvrez l'image disque et lancez l'installateur.
+3. Une fois l'installation terminée, ouvrez un nouveau terminal et vérifiez avec
+   `java -version`.
 
 ### Linux (Ubuntu/Debian)
 
-1. Ouvrez un terminal et installez le paquet :
-   ```bash
-   sudo apt install openjdk-17-jre
-   ```
-2. Contrôlez que Java est bien présent avec `java -version`.
+1. Téléchargez l'archive **JDK 17** adaptée à votre système sur le [site d'Oracle](https://www.oracle.com/java/technologies/downloads/).
+2. Décompressez-la dans le répertoire de votre choix (par exemple `/opt/java`).
+3. Ajoutez le chemin `bin` de cette installation à votre `PATH` puis vérifiez
+   la version avec `java -version`.
 
 Ces étapes vous permettent d'obtenir Java 17 (ou une version plus récente),
 nécessaire pour lancer LotoYoYo.
