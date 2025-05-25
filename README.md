@@ -9,6 +9,7 @@ LotoYoYo est une application Java permettant de générer et d'analyser des gril
 - **Calculs statistiques** : nombre total de tickets, coût, couverture des scénarios, distribution des bons pronostics, worst‑case, espérance, écart‑type, etc.
 - **Auto‑Grille** : génération automatique d'un ensemble de tickets pertinents à partir des cotes et des issues sélectionnées.
 - **Interface sombre moderne** : basée sur Swing, FlatLaf et MigLayout.
+- **Bouton de thème** : permet de basculer entre le thème sombre et un thème bleu/blanc.
 - **Aide intégrée** : une fenêtre d'aide détaillée explique le fonctionnement du logiciel.
 
 ## Prérequis

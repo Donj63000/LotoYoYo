@@ -8,8 +8,8 @@ public class Aide extends JFrame {
     public Aide() {
         super("Aide - LotoYoYo");
 
-        // Appliquer le thème sombre
-        Theme.applyDarkTheme();
+        // Appliquer le thème courant
+        Theme.applyCurrentTheme();
 
         // Configuration de base de la fenêtre
         setSize(800, 600);
