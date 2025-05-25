@@ -10,7 +10,6 @@ public class Main extends JFrame {
     private final JPanel gridsContainer;
     private final JTextField tfNbMatches;
     private final JButton btnAdd;
-    private final JButton btnTheme;
     private final JPanel leftPanel;
     private final JLabel lblNb;
     private final JScrollPane scroll;
@@ -70,16 +69,6 @@ public class Main extends JFrame {
         });
         leftPanel.add(btnHelp);
 
-        btnTheme = new JButton("Thème");
-        btnTheme.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnTheme.setBackground(Theme.PRIMARY_COLOR);
-        btnTheme.setForeground(Color.WHITE);
-        btnTheme.setFocusPainted(false);
-        btnTheme.addActionListener(e -> {
-            Theme.toggleTheme();
-            applyTheme();
-        });
-        leftPanel.add(btnTheme);
 
         topPanel.add(leftPanel);
 
