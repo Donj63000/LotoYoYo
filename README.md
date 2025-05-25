@@ -56,6 +56,16 @@ mvn package
 
 Le JAR final `LotoYoYo.jar` sera généré dans le répertoire `target/`.
 
+## Développement avec IntelliJ IDEA
+
+Pour modifier le code source ou contribuer au projet, vous pouvez utiliser **IntelliJ IDEA** :
+
+1. Installez [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) dans sa version Community ou Ultimate.
+2. Dans la fenêtre d'accueil, choisissez **Open** et sélectionnez le dossier contenant ce dépôt (ou directement le fichier `pom.xml`).
+3. L'IDE importe alors le projet Maven et télécharge automatiquement les dépendances nécessaires.
+4. Le code se trouve sous `src/main/java`. Modifiez les fichiers souhaités puis utilisez le menu **Build > Build Project** pour compiler.
+5. Vous pouvez créer une configuration d'exécution afin de lancer l'application depuis IntelliJ.
+
 ## Exécution
 
 Lorsque Java est installé, téléchargez le fichier `LotoYoYo.jar` (inclus dans ce
